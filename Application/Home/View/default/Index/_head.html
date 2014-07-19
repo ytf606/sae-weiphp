@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>WeiPHP-简洁而强大的开源微信公众平台开发框架 weiphp.cn</title>
+<meta content="遵循Apache2开源协议,免费提供使用,微信功能插件化开发,多公众号管理,配置简单" name="keywords"/>
+<meta content="weiphp 简洁而强大的开源微信公众平台开发框架微信功能插件化开发,多公众号管理,配置简单" name="description"/>
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+<link type="text/css" rel="stylesheet" href="__CSS__/about.css?v={:SITE_VERSION}" />
+<link type="text/css" rel="stylesheet" href="__CSS__/forum.css?v={:SITE_VERSION}" />
+<script type="text/javascript" src="__STATIC__/jquery-2.0.3.min.js"></script>
+<script type="text/javascript" src="__STATIC__/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="__JS__/admin_common.js?v={:SITE_VERSION}"></script>
+</head>
+<body>
+	<div class="head">
+    	<div class="wrap">
+        	<h1 class="fl"><a class="logo" href="{:SITE_URL}" title="返回首页">首家开源的微信公众平台开发框架微信功能插件化开发,多公众号管理,配置简单</a></h1>
+            <div class="nav">
+            	<a <if condition="ACTION_NAME eq 'index' and CONTROLLER_NAME eq 'Index'">class="cur"</if> href="{:U('home/index/index')}">首页</a>
+                <!--<a <if condition="ACTION_NAME eq 'index' and CONTROLLER_NAME eq 'Forum'">class="cur"</if> href="{:U('home/forum/index')}">讨论区</a>-->
+                <!--<a <if condition="ACTION_NAME eq 'store' and CONTROLLER_NAME eq 'Forum'">class="cur"</if> href="{:U('home/forum/store')}">插件商店</a>-->
+                
+                <a <if condition="ACTION_NAME eq 'help'">class="cur"</if> href="{:U('home/index/help')}">帮助中心</a>
+                <a href="{:U('home/index/main')}">管理中心</a>
+                <a href="http://www.weiphp.cn/wiki" target="_blank">二次开发手册</a>
+                <a href="http://bbs.weiphp.cn" target="_blank">论坛</a>
+            </div>
+        </div>
+    </div>

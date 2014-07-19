@@ -1,0 +1,65 @@
+<extend name="Public/base"/>
+
+<block name="body">
+	<!-- 标题栏 -->
+	<div class="main-title">
+		<h2>在线升级</h2>
+	</div>
+    <h4>1、升级操作教程</h4>
+    <p>第一步：备份服务器文件，为了安全和方便如果升级失败能恢复原样，请一定要把你的整个网站的文件进行备份</p>
+    <p>第二步：备份数据库，把数据库导出成SQL文件进行备份</p>    
+    <p>第三步：下载升级包，如果有多个升级包，一定要注意按升级包的版本号从小到大顺序下载升级，否则会导致系统异常</p>
+    <p>第四步：解压升级包，查看里面的readem.txt升级说明，如果里面有升级操作说明，优先按里面的说明进行升级操作</p>
+    <p>第五步：把升级包里的文件上传到你的网站，并覆盖旧文件。覆盖前请确认已经做好备份，如果你的网站文件有修改过，请覆盖前用文件对比工具进行对比，确认是否可以覆盖。</p>
+    <p>第六步：如果升级包的根目录下有update_db_tool.php，说明需要升级数据库，请使用下面的数据库升级工具进行升级</p>
+    <p>第七步：清空缓存，把 Runtime 目录下的目录和文件全部删除即可，至此升级完毕</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <div>  
+
+    </div>
+    <div>
+    <h4>2、数据库升级工具</h4>
+    <p>此工具可用于执行升级包里的数据库升级文件：update_db_tool.php，请先确认此升级文件已经放到网站根目录，然后点击下面的升级按钮升级即可。升级完后要及时把update_db_tool.php文件删除，以防重复升级导致数据库数据错乱</p>
+    <a class="btn" href="{:U('admin/Update/deal_sql')}">升级数据库</a>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>    
+    </div>
+
+	<!-- 数据列表 -->
+	<div class="data-table">
+    <h4>3、升级包下载</h4>
+    检测到有以下 {$_list|count} 个新的版本可以升级，请<span style="color: #F00">严格</span>按升级包版本号从小到大顺序下载升级包升级
+<div class="data-table table-striped">
+<table>
+    <thead>
+        <tr>
+		<th>版本号</th>
+		<th>升级包名</th>
+		<th>描述</th>
+		<th>创建时间</th>
+		<th>操作</th>
+		</tr>
+    </thead>
+    <tbody>
+	<notempty name="_list">
+		<volist name="_list" id="vo">
+		<tr>
+			<td>{$vo.version} </td>
+			<td>{$vo.title}</td>
+			<td>{$vo.description}</td>
+			<td>{$vo.create_date|time_format}</td>
+			<td>
+				<a href="http://www.weiphp.cn/index.php?s=/home/index/download_update_package.html&version={$vo.version}">下载</a>
+            </td>
+		</tr>
+		</volist>
+		<else/>
+		<td colspan="6" class="text-center"> aOh! 你目前的版本已经是最新的! </td>
+		</notempty>
+	</tbody>
+    </table>
+
+        </div>
+    </div>
+</block>

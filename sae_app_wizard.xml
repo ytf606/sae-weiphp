@@ -1,0 +1,4 @@
+<appwizard><introduction><name></name><author>ytf606</author><icon></icon><homepage></homepage><description><![CDATA[]]></description></introduction><platform><services><service></service><service size="1M">Memcache</service><service>Mysql</service></services><appconfig><tpl><![CDATA[
+name: <<appname>>
+version: <<version>>
+]]></tpl></appconfig></platform><code><initScript>install.php</initScript></code></appwizard>

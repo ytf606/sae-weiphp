@@ -1,0 +1,41 @@
+<extend name="Public/base"/>
+
+<block name="header">
+    <li class="active"><a href="{:U('SaeInstall/protocol')}" target="_blank">安装协议</a></li>
+    <li class="active"><a href="{:U('SaeInstall/saeEnv')}" target="_blank">环境检测</a></li>
+    <li class="active"><a href="javascript:;">创建数据库</a></li>
+    <li class="active"><a href="javascript:;">安装</a></li>
+    <li class="active"><a href="javascript:;">完成</a></li>
+</block>
+
+<block name="body">
+<!--SAE TODO STEP1-->
+    <h1>安装</h1>
+    <div id="show-list" class="install-database">
+    </div>
+    <script type="text/javascript">
+        var list   = document.getElementById('show-list');
+        function showmsg(msg, classname){
+            var li = document.createElement('p'); 
+            li.innerHTML = msg;
+            classname && li.setAttribute('class', classname);
+            list.appendChild(li);
+            document.body.scrollTop += 45;
+        }
+    </script>
+    <p>安装完成！请使用以下信息登陆</p>
+	
+    <p>用户名：admin</p>
+    <p>密码：admin</p>
+    <p>管理员邮箱：ytf606@gmail.com</p>
+    <div style="background-color:red;padding:30px">
+        <p>PS：此工程只是把weiphp原框架做了简单得移植和一键安装，并上线到SAE的应用仓库供大家使用，如疑问发邮件<a href="mailto:ytf606@gmail.com">ytf606@gmail.com</a>到或微博(<a href="http://weibo.com/2135696647" target="_blank">ytf606</a>)私信留言等</p>
+        <p>如果您下载了此源码并且手动上传到您SAE自己的应用中，请注意一下两点：<br/>
+        1. 请手动开启您应用的MySql服务;<br/>
+        2. 请手动初始化您应用的memcache服务，大小1M即可;<br/>
+        3. 如果您想更改工程用户登陆的加密参数的话请工程根目录下Application/Install/Conf/config.php中的auth_key值、Application/User/Conf/config.php中的UC_AUTH_KEY值以及Application/Common/Conf/config.php中的DATA_AUTH_KEY值并保持三者完全一致
+        4. 如果想更改表前缀，请修改上一条中三个文件中对应的prefix、UC_TABLE_PREFIX、DB_PREFIX参数值并保持三者完全一致
+        </p>
+    </div>
+
+</block>
