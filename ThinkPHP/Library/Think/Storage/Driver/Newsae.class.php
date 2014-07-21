@@ -110,7 +110,7 @@ class Newsae extends Storage{
      */
     public function unlink($filename, $type='')
     {
-        return $this->fileDetele($filename);
+        return $this->fileDelete($filename);
     }
 
 

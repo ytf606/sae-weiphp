@@ -28,7 +28,7 @@ class ThinkController extends AdminController {
 		$list_data = $this->_get_model_list ( $model, $p );
 		$this->assign ( $list_data );
 		
-		$this->meta_title = $model ['title'] . '列表';
+        $this->meta_title = $model ['title'] . '列表';
 
 		$this->display ( $model ['template_list'] );
 	}

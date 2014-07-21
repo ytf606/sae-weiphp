@@ -254,7 +254,7 @@ class AdminController extends Controller {
             if($current){
                 $nav = D('Menu')->getPath($current['id']);
                 $nav_first_title = $nav[0]['title'];
-
+                
                 foreach ($menus['main'] as $key => $item) {
                     if (!is_array($item) || empty($item['title']) || empty($item['url']) ) {
                         $this->error('控制器基类$menus属性元素配置有误');
@@ -267,7 +267,7 @@ class AdminController extends Controller {
                         unset($menus['main'][$key]);
                         continue;//继续循环
                     }
-
+                    
                     // 获取当前主菜单的子菜单项
                     if($item['title'] == $nav_first_title){
                         $menus['main'][$key]['class']='current';
@@ -301,6 +301,7 @@ class AdminController extends Controller {
                                     $to_check_urls[] = $to_check_url;
                             }
                         }
+                        
                         // 按照分组生成子菜单树
                         foreach ($groups as $g) {
                             $map = array('group'=>$g);

@@ -1785,8 +1785,7 @@ INSERT INTO `wp_menu` VALUES ('92', '删除', '90', '0', 'Database/del', '0', '�
 INSERT INTO `wp_menu` VALUES ('93', '其他', '0', '5', 'other', '1', '', '', '0');
 INSERT INTO `wp_menu` VALUES ('96', '新增', '75', '0', 'Menu/add', '0', '', '系统设置', '0');
 INSERT INTO `wp_menu` VALUES ('98', '编辑', '75', '0', 'Menu/edit', '0', '', '', '0');
-INSERT INTO `wp_menu` VALUES ('104', '下载管理', '102', '0', 'Think/lists?model=download', '0', '', '', '0');
-INSERT INTO `wp_menu` VALUES ('105', '配置管理', '102', '0', 'Think/lists?model=config', '0', '', '', '0');
+INSERT INTO `wp_menu` VALUES ('104', '下载管理', '68', '0', 'Think/lists?model=download', '0', '', '', '0');
 INSERT INTO `wp_menu` VALUES ('106', '行为日志', '16', '0', 'Action/actionlog', '0', '', '行为管理', '0');
 INSERT INTO `wp_menu` VALUES ('108', '修改密码', '16', '0', 'User/updatePassword', '1', '', '', '0');
 INSERT INTO `wp_menu` VALUES ('109', '修改昵称', '16', '0', 'User/updateNickname', '1', '', '', '0');

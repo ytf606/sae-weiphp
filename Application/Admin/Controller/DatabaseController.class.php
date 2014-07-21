@@ -27,32 +27,63 @@ class DatabaseController extends AdminController{
             /* 数据还原 */
             case 'import':
                 //列出备份文件列表
-                $path = realpath(C('DATA_BACKUP_PATH'));
-                $flag = \FilesystemIterator::KEY_AS_FILENAME;
-                $glob = new \FilesystemIterator($path,  $flag);
-
                 $list = array();
-                foreach ($glob as $name => $file) {
-                    if(preg_match('/^\d{8,8}-\d{6,6}-\d+\.sql(?:\.gz)?$/', $name)){
-                        $name = sscanf($name, '%4s%2s%2s-%2s%2s%2s-%d');
+                //add by ytf606@gmail.com
+                if (defined('SAE_TMP_PATH')) {
+                    $path = basename(C('DATA_BACKUP_PATH'));
+                    $filenum = \Think\Storage::fileNum($path);
+                    $glob = \Think\Storage::fileListByPath($path, $filenum);
+                    foreach ($glob['files'] as $key=>$value) {
+                        if (preg_match('/^\d{8,8}-\d{6,6}-\d+\.sql(?:\.gz)?$/', $value['Name'])) {
+                            $name = sscanf($value['Name'], '%4s%2s%2s-%2s%2s%2s-%d');
+                            
+                            $date = "{$name[0]}-{$name[1]}-{$name[2]}";
+                            $time = "{$name[3]}:{$name[4]}:{$name[5]}";
+                            $part = $name[6];
 
-                        $date = "{$name[0]}-{$name[1]}-{$name[2]}";
-                        $time = "{$name[3]}:{$name[4]}:{$name[5]}";
-                        $part = $name[6];
+                            if(isset($list["{$date} {$time}"])){
+                                $info = $list["{$date} {$time}"];
+                                $info['part'] = max($info['part'], $part);
+                                $info['size'] = $info['size'] + $value['length'];
+                            } else {
+                                $info['part'] = $part;
+                                $info['size'] = $value['length'];
+                            }
+                            $extension        = strtoupper(pathinfo($value['fullName'], PATHINFO_EXTENSION));
+                            $info['compress'] = ($extension === 'SQL') ? '-' : $extension;
+                            $info['time']     = strtotime("{$date} {$time}");
 
-                        if(isset($list["{$date} {$time}"])){
-                            $info = $list["{$date} {$time}"];
-                            $info['part'] = max($info['part'], $part);
-                            $info['size'] = $info['size'] + $file->getSize();
-                        } else {
-                            $info['part'] = $part;
-                            $info['size'] = $file->getSize();
+                            $list["{$date} {$time}"] = $info;
+                            
                         }
-                        $extension        = strtoupper(pathinfo($file->getFilename(), PATHINFO_EXTENSION));
-                        $info['compress'] = ($extension === 'SQL') ? '-' : $extension;
-                        $info['time']     = strtotime("{$date} {$time}");
+                    }
+                } else {
+                    $path = realpath(C('DATA_BACKUP_PATH'));
+                    $flag = \FilesystemIterator::KEY_AS_FILENAME;
+                    $glob = new \FilesystemIterator($path,  $flag);
 
-                        $list["{$date} {$time}"] = $info;
+                    foreach ($glob as $name => $file) {
+                        if(preg_match('/^\d{8,8}-\d{6,6}-\d+\.sql(?:\.gz)?$/', $name)){
+                            $name = sscanf($name, '%4s%2s%2s-%2s%2s%2s-%d');
+
+                            $date = "{$name[0]}-{$name[1]}-{$name[2]}";
+                            $time = "{$name[3]}:{$name[4]}:{$name[5]}";
+                            $part = $name[6];
+
+                            if(isset($list["{$date} {$time}"])){
+                                $info = $list["{$date} {$time}"];
+                                $info['part'] = max($info['part'], $part);
+                                $info['size'] = $info['size'] + $file->getSize();
+                            } else {
+                                $info['part'] = $part;
+                                $info['size'] = $file->getSize();
+                            }
+                            $extension        = strtoupper(pathinfo($file->getFilename(), PATHINFO_EXTENSION));
+                            $info['compress'] = ($extension === 'SQL') ? '-' : $extension;
+                            $info['time']     = strtotime("{$date} {$time}");
+
+                            $list["{$date} {$time}"] = $info;
+                        }
                     }
                 }
                 $title = '数据还原';
@@ -167,23 +198,26 @@ class DatabaseController extends AdminController{
         if(IS_POST && !empty($tables) && is_array($tables)){ //初始化
             //读取备份配置
             $config = array(
-                'path'     => realpath(C('DATA_BACKUP_PATH')) . DIRECTORY_SEPARATOR,
+                //add by ytf606@gmail.com
+                'path'     => defined('SAE_TMP_PATH') ? C('DATA_BACKUP_PATH') . DIRECTORY_SEPARATOR : realpath(C('DATA_BACKUP_PATH')) . DIRECTORY_SEPARATOR,
                 'part'     => C('DATA_BACKUP_PART_SIZE'),
                 'compress' => C('DATA_BACKUP_COMPRESS'),
                 'level'    => C('DATA_BACKUP_COMPRESS_LEVEL'),
             );
 
             //检查是否有正在执行的任务
+            //add by ytf606@gmail.com
             $lock = "{$config['path']}backup.lock";
-            if(is_file($lock)){
+            if(is_file($lock) || \Think\Storage::has($lock)){
                 $this->error('检测到有一个备份任务正在执行，请稍后再试！');
             } else {
                 //创建锁文件
-                file_put_contents($lock, NOW_TIME);
+                defined('SAE_TMP_PATH') ? \Think\Storage::put($lock, NOW_TIME) : file_put_contents($lock, NOW_TIME);
             }
 
             //检查备份目录是否可写
-            is_writeable($config['path']) || $this->error('备份目录不存在或不可写，请检查后重试！');
+            //add by ytf606@gmail.com
+            (is_writeable($config['path']) || defined('SAE_TMP_PATH')) || $this->error('备份目录不存在或不可写，请检查后重试！');
             session('backup_config', $config);
 
             //生成备份文件信息
@@ -198,7 +232,11 @@ class DatabaseController extends AdminController{
 
             //创建备份文件
             $Database = new Database($file, $config);
-            if(false !== $Database->create()){
+            
+            //add by ytf606@gmail.com
+            $ret = $Database->create();
+            defined('SAE_TMP_PATH') && \Think\Storage::unlink($lock);
+            if(false !== $ret){
                 $tab = array('id' => 0, 'start' => 0);
                 $this->success('初始化成功！', '', array('tables' => $tables, 'tab' => $tab));
             } else {
@@ -241,17 +279,24 @@ class DatabaseController extends AdminController{
         if(is_numeric($time) && is_null($part) && is_null($start)){ //初始化
             //获取备份文件信息
             $name  = date('Ymd-His', $time) . '-*.sql*';
-            $path  = realpath(C('DATA_BACKUP_PATH')) . DIRECTORY_SEPARATOR . $name;
-            $files = glob($path);
+            //add by ytf606@gmail.com
+            $path  = defined('SAE_TMP_PATH') ? basename(C('DATA_BACKUP_PATH')) : realpath(C('DATA_BACKUP_PATH')) . DIRECTORY_SEPARATOR . $name;
+            defined('SAE_TMP_PATH') && $files = \Think\Storage::fileList($path);
             $list  = array();
             foreach($files as $name){
                 $basename = basename($name);
+                if (defined('SAE_TMP_PATH')) {
+                    $name = \Think\Storage::getUrl($name);
+                    $date_tmp = explode("-", $basename, 3);
+                    if (strtotime($date_tmp[0] . $date_tmp[1]) != $time) {
+                        continue; 
+                    }
+                }
                 $match    = sscanf($basename, '%4s%2s%2s-%2s%2s%2s-%d');
                 $gz       = preg_match('/^\d{8,8}-\d{6,6}-\d+\.sql.gz$/', $basename);
                 $list[$match[6]] = array($match[6], $name, $gz);
             }
             ksort($list);
-
             //检测文件正确性
             $last = end($list);
             if(count($list) === $last[0]){
@@ -267,7 +312,6 @@ class DatabaseController extends AdminController{
                 'compress' => $list[$part][2]));
 
             $start = $db->import($start);
-
             if(false === $start){
                 $this->error('还原数据出错！');
             } elseif(0 === $start) { //下一卷

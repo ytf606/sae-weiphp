@@ -261,9 +261,15 @@ sql;
 			
 			$path = RUNTIME_PATH . 'install.sql';
 		}
-		
-		@file_put_contents ( $path, $sql );
-		redirect ( SITE_URL . '/' . $path );
+	    
+        //add by ytf606@gmail.com
+        if (defined('SAE_TMP_PATH')) {
+            \Think\Storage::put($path, $sql);
+            redirect(\Think\Storage::getUrl($path));
+        } else {
+		    @file_put_contents ( $path, $sql );
+		    redirect ( SITE_URL . '/' . $path );
+        }
 	}
 	// 一键增加微信插件常用模型
 	function add_comon_model() {

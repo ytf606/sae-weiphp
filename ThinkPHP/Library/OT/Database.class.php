@@ -107,8 +107,12 @@ class Database{
         //一般情况压缩率都会高于50%；
         $size = $this->config['compress'] ? $size / 2 : $size;
         
-        $this->open($size); 
-        return $this->config['compress'] ? @gzwrite($this->fp, $sql) : @fwrite($this->fp, $sql);
+        $this->open($size);
+        
+        //add by ytf606@gmail.com
+        $backuppath = $this->config['path'];
+        $filename = "{$backuppath}{$this->file['name']}-{$this->file['part']}.sql";
+        return defined('SAE_TMP_PATH') ? \Think\Storage::append($filename, $sql) : ($this->config['compress'] ? @gzwrite($this->fp, $sql) : @fwrite($this->fp, $sql));
     }
 
     /**
@@ -182,8 +186,11 @@ class Database{
         }
         
         $sql  = '';
+        //add by ytf606@gmail.com
+        (defined('SAE_TMP_PATH') && !$start) && $start = 11;
         if($start){
             $this->config['compress'] ? gzseek($gz, $start) : fseek($gz, $start);
+            fgets($gz, $start);
         }
         
         for($i = 0; $i < 1000; $i++){
