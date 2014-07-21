@@ -73,7 +73,7 @@ class FileController extends HomeController {
             C('PICTURE_UPLOAD_DRIVER'),
             C("UPLOAD_{$pic_driver}_CONFIG")
         ); //TODO:上传到远程服务器
-
+        
         /* 记录图片信息 */
         if($info){
             $return['status'] = 1;
@@ -82,7 +82,7 @@ class FileController extends HomeController {
             $return['status'] = 0;
             $return['info']   = $Picture->getError();
         }
-
+        
         /* 返回JSON数据 */
         $this->ajaxReturn($return);
     }

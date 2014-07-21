@@ -27,7 +27,7 @@ class Think {
      * @return void
      */
     static public function start() {
-      // 注册AUTOLOAD方法
+        // 注册AUTOLOAD方法
       spl_autoload_register('Think\Think::autoload');      
       // 设定错误和异常处理
       register_shutdown_function('Think\Think::fatalError');
@@ -35,7 +35,7 @@ class Think {
       set_exception_handler('Think\Think::appException');
 
       // 初始化文件存储方式
-      Storage::connect(STORAGE_TYPE);
+      Storage::connect('newsae');
 
       $runtimefile  = RUNTIME_PATH.APP_MODE.'~runtime.php';
       if(!APP_DEBUG && Storage::has($runtimefile,'runtime')){
@@ -52,14 +52,18 @@ class Think {
                 include $file;
                 if(!APP_DEBUG) $content   .= compile($file);
               }
-          }
+          }         
+
 
           // 加载应用模式配置文件
           foreach ($mode['config'] as $key=>$file){
               is_numeric($key)?C(include $file):C($key,include $file);
           }
+          
+          //add by ytf606@gmail.com
+          Storage::domainSet(C('SAE_STORAGE'));
 
-          // 读取当前应用模式对应的配置文件
+          // 读取当前应用模式对应的配置文件        
           if('common' != APP_MODE && is_file(CONF_PATH.'config_'.APP_MODE.'.php'))
               C(include CONF_PATH.'config_'.APP_MODE.'.php');  
 

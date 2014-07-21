@@ -159,10 +159,8 @@ function write_config($config, $auth){
 
 		//写入应用配置文件
 		if(!IS_WRITE){
-			return '由于您的环境不可写，请复制下面的配置文件内容覆盖到相关的配置文件，然后再登录后台。<p>'.realpath(APP_PATH).'/Common/Conf/config.php</p>
-			<textarea name="" style="width:650px;height:185px">'.$conf.'</textarea>
-			<p>'.realpath(APP_PATH).'/User/Conf/config.php</p>
-			<textarea name="" style="width:650px;height:125px">'.$user.'</textarea>';
+            show_msg('配置文件写入成功');
+            return '';
 		}else{
 			if(file_put_contents(APP_PATH . 'Common/Conf/config.php', $conf) &&
 			   file_put_contents(APP_PATH . 'User/Conf/config.php', $user)){

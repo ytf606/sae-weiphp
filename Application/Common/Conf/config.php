@@ -19,7 +19,7 @@ return array(
     //'MODULE_ALLOW_LIST'  => array('Home','Admin'),
 
     /* 系统数据加密设置 */
-    'DATA_AUTH_KEY' => 'd!CfIv#ZA(uW6O|r&*sM?:>"K[l3znX`R}otj.pe', //默认数据加密KEY
+    //'DATA_AUTH_KEY' => 'd!CfIv#ZA(uW6O|r&*sM?:>"K[l3znX`R}otj.pe', //默认数据加密KEY
 
     /* 调试配置 */
     'SHOW_PAGE_TRACE' => true,
@@ -38,19 +38,22 @@ return array(
     'DEFAULT_FILTER' => 'safe', //全局过滤函数
 
     /* 数据库配置 */
-    'DB_TYPE'   => 'mysql', // 数据库类型
+    /* 'DB_TYPE'   => 'mysql', // 数据库类型
     'DB_HOST'   => SAE_MYSQL_HOST_M, //服务器地址
     'DB_NAME'   => SAE_MYSQL_DB, // 数据库名
     'DB_USER'   => SAE_MYSQL_USER, // 用户名
     'DB_PWD'    => SAE_MYSQL_PASS,  // 密码
     'DB_PORT'   => SAE_MYSQL_PORT, // 端口
+    */
     'DB_PREFIX' => 'sae_', // 数据库表前缀
+    'SAE_STORAGE' => 'weiphp',
+    'DATA_AUTH_KEY' => 'd!CfIv#ZA(uW6O|r&*sM?:>"K[l3znX`R}otj.pe',
 
     /* 文档模型配置 (文档模型核心配置，请勿更改) */
     'DOCUMENT_MODEL_TYPE' => array(2 => '主题', 1 => '目录', 3 => '段落'),
 	
     /* 数据缓存设置 */
-    'DATA_CACHE_PREFIX'    => 'weiphp_', // 缓存前缀
+    //'DATA_CACHE_PREFIX'    => 'weiphp_', // 缓存前缀
     'DATA_CACHE_TYPE'      => 'File', // 数据缓存类型
 	
     /* 文件上传相关配置 */
@@ -85,9 +88,13 @@ return array(
 		'callback' => false, //检测文件是否存在回调函数，如果存在返回文件信息数组
     ), //图片上传相关配置（文件上传类配置）
 
-    'PICTURE_UPLOAD_DRIVER'=>'local',	
+    'PICTURE_UPLOAD_DRIVER'=>defined('SAE_TMP_PATH') ? 'sae' : 'local',	
 	
     //本地上传文件驱动配置
+    'UPLOAD_SAE_CONFIG'=>array(
+        'domain' => defined('SAE_STORAGE') ? SAE_STORAGE : 'weiphp',
+    ),
+
     'UPLOAD_LOCAL_CONFIG'=>array(),
     'UPLOAD_BCS_CONFIG'=>array(
         'AccessKey'=>'',
@@ -118,6 +125,5 @@ return array(
 		'hash'     => true, //是否生成hash编码
 		'callback' => false, //检测文件是否存在回调函数，如果存在返回文件信息数组
     ),	
-
 
 );

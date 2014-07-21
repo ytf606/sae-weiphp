@@ -40,6 +40,8 @@ defined('APP_DEBUG') 	or define('APP_DEBUG',      false); // 是否调试模式
 if(function_exists('saeAutoLoader')){// 自动识别SAE环境
     defined('APP_MODE')     or define('APP_MODE',      'sae');
     defined('STORAGE_TYPE') or define('STORAGE_TYPE',  'Sae');
+    //add by ytf606@gmail.com
+    defined('APP_PLATFORM') or define('APP_PLATFORM', 'SAE');
 }else{
     defined('APP_MODE')     or define('APP_MODE',       'common'); // 应用模式 默认为普通模式    
     defined('STORAGE_TYPE') or define('STORAGE_TYPE',   'File'); // 存储类型 默认为File    

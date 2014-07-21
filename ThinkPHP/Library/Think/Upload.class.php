@@ -324,7 +324,6 @@ class Upload{
 
         /* 文件保存后缀，支持强制更改文件后缀 */
         $ext = empty($this->config['saveExt']) ? $file['ext'] : $this->saveExt;
-
         return $savename . '.' . $ext;
     }
 

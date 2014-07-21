@@ -14,13 +14,10 @@ use Think\Storage;
 class IndexController extends Controller{
 	//安装首页
 	public function index(){
-		if(Storage::has(MODULE_PATH . 'Data/install.lock')){
+        
+        if(Storage::has(MODULE_PATH . 'Data/install.lock')){
 			$this->error('已经成功安装了WeiPHP，请不要重复安装!');
 		}
-        //SAE TODO
-        if (defined('SAE_TMP_PATH')) {
-            $this->redirect('/SaeInstall');  
-        }
 
 		session('step', 0);
 		session('error', false);
@@ -38,7 +35,8 @@ class IndexController extends Controller{
 			$this->redirect("Install/step{$step}");
 		}
 
-		Storage::put(MODULE_PATH . 'Data/install.lock', 'lock');
+        Storage::put(MODULE_PATH . 'Data/install.lock', 'lock', '');
+
 		//创建配置文件
 		$this->assign('info',session('config_file'));
 

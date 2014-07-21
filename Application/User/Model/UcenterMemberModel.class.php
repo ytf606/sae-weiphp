@@ -103,7 +103,12 @@ class UcenterMemberModel extends Model{
 			'username' => $username,
 			'password' => $password,
 			'email'    => $email
-		);						// 验证手机		empty ( $mobile ) || $data ['mobile'] = $mobile;		empty ( $openid ) || $data ['openid'] = $openid;		empty ( $token ) || $data ['token'] = $token;
+		);
+			
+			// 验证手机
+		empty ( $mobile ) || $data ['mobile'] = $mobile;
+		empty ( $openid ) || $data ['openid'] = $openid;
+		empty ( $token ) || $data ['token'] = $token;
 
 		/* 添加用户 */
 		if($this->create($data)){

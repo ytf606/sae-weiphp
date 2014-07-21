@@ -15,7 +15,8 @@ use Think\Storage;
 class InstallController extends Controller{
 
 	protected function _initialize(){
-		if(session('step') === null){
+        //add by ytf606@gmail.com
+		if(session('step') === null || defined("SAE_TMP_PATH")){
 			$this->redirect('Index/index');
 		}
 

@@ -29,6 +29,6 @@
 </block>
 
 <block name="footer">
-    <a class="btn btn-primary btn-large" href="{:U('Install/step1')}">同意安装协议</a>
+    <a class="btn btn-primary btn-large" href="<defined name='SAE_TMP_PATH'>{:U('SaeInstall/step1')}<else/>{:U('Install/step1')}</defined>">同意安装协议</a>
     <a class="btn btn-large" href="http://www.WeiPHP.cn">不同意</a>
 </block>

@@ -31,10 +31,10 @@ class Sae{
      */
 	public function __construct($root, $config = null){
         $arr=explode('/',trim($root,'./'));
-        $domain=strtolower(array_shift($arr));
         if(is_array($config) && isset($config['domain'])){
             $this->domain=strtolower($config['domain']);
         }else{
+            $domain=strtolower(array_shift($arr));
             $this->domain=$domain;
         }
         $this->rootPath=implode('/',$arr);

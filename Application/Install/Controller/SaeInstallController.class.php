@@ -14,12 +14,22 @@ use Think\Storage;
 
 class SaeInstallController extends Controller
 {
+	protected function _initialize(){
+		if(session('step') === null){
+			$this->redirect('Index/index');
+		}
 
-    public function index(){
 		if(Storage::has(MODULE_PATH . 'Data/install.lock')){
 			$this->error('已经成功安装了WeiPHP，请不要重复安装!');
 		}
-		
+	}
+    
+    public function index(){
+	    Storage::domainSet(C('SAE_STORAGE'));	
+        if(Storage::has(MODULE_PATH . 'Data/install.lock')){
+			$this->error('已经成功安装了WeiPHP，请不要重复安装!');
+		}
+       
         //环境检测
 		$env = check_env();
 
@@ -65,7 +75,8 @@ class SaeInstallController extends Controller
 		//创建配置文件
 		$conf 	=	write_config($DB, $auth);
 		
-		Storage::put(MODULE_PATH . 'Data/install.lock', 'lock');
+        Storage::put(MODULE_PATH . 'Data/install.lock', 'lock');
+
 		//创建配置文件
 		$this->assign('info', $conf);
     }
@@ -94,8 +105,8 @@ class SaeInstallController extends Controller
 		$this->assign('func', $func);
         $this->display();
     }
-
-	//安装第一步，检测运行所需的环境设置
+    
+    	//安装第一步，检测运行所需的环境设置
 	public function step1(){
 		session('error', false);
 
@@ -135,27 +146,28 @@ class SaeInstallController extends Controller
 			}
 
 			//检测数据库配置
-			if(!is_array($db) || empty($db[0]) ||  empty($db[1]) || empty($db[2]) || empty($db[3])){
-				$this->error('请填写完整的数据库配置');
-			} else {
-				$DB = array();
-				list($DB['DB_TYPE'], $DB['DB_HOST'], $DB['DB_NAME'], $DB['DB_USER'], $DB['DB_PWD'],
-					 $DB['DB_PORT'], $DB['DB_PREFIX']) = $db;
-				//缓存数据库配置
-				session('db_config', $DB);
+			$DB = array(
+                	'DB_TYPE'			=> 	C('DB_TYPE'),     // 数据库类型
+					'DB_HOST'			=> 	C('DB_HOST'), // 服务器地址
+					'DB_NAME'			=> 	C('DB_NAME'),        // 数据库名
+					'DB_USER'			=> 	C('DB_USER'),    // 用户名
+					'DB_PWD'			=> 	C('DB_PWD'),         // 密码
+					'DB_PORT'			=> 	C('DB_PORT'),        // 端口
+    				'DB_PREFIX'         =>  C('DB_PREFIX'),
+            );
+            //缓存数据库配置
+			session('db_config', $DB);
 
-				//创建数据库
-				$dbname = $DB['DB_NAME'];
-				unset($DB['DB_NAME']);
-				$db  = Db::getInstance($DB);
-				$sql = "CREATE DATABASE IF NOT EXISTS `{$dbname}` DEFAULT CHARACTER SET utf8";
-				$db->execute($sql) || $this->error($db->getError());
-			}
+			//创建数据库
+			$dbname = $DB['DB_NAME'];
+			unset($DB['DB_NAME']);
+			$db  = Db::getInstance($DB);
+			$sql = "CREATE DATABASE IF NOT EXISTS `{$dbname}` DEFAULT CHARACTER SET utf8";
+			$db->execute($sql) || $this->error($db->getError());
 
 			//跳转到数据库安装页面
 			$this->redirect('step3');
 		} else {
-
 			session('error') && $this->error('环境检测没有通过，请调整环境后重试！');
 
 			$step = session('step');
@@ -184,13 +196,13 @@ class SaeInstallController extends Controller
 		create_tables($db, $dbconfig['DB_PREFIX']);
 
 		//注册创始人帐号
-		$auth  = build_auth_key();
+        $auth  = C('DATA_AUTH_KEY');
 		$admin = session('admin_info');
 		register_administrator($db, $dbconfig['DB_PREFIX'], $admin, $auth);
 
 		//创建配置文件
 		$conf 	=	write_config($dbconfig, $auth);
-		session('config_file',$conf);
+        session('config_file',$conf);
 		if(session('error')){
 			show_msg();
 		} else {

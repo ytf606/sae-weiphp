@@ -149,8 +149,12 @@ class Dispatcher {
 			C ( 'CACHE_PATH', CACHE_PATH . MODULE_NAME . '/' );
 			
 			// 加载模块配置文件
-			if (is_file ( MODULE_PATH . 'Conf/config.php' ))
-				C ( include MODULE_PATH . 'Conf/config.php' );
+            if (defined('SAE_TMP_PAHT') && Storage::has(C(strtoupper(MODULE_NAME . '_CONF')))) {
+                C(include Storage::load(C(strtoupper(MODULE_NAME . '_CONF'))));
+            } else {
+				if (is_file ( MODULE_PATH . 'Conf/config.php' ))
+					C ( include MODULE_PATH . 'Conf/config.php' );
+            }
 				// 加载应用模式对应的配置文件
 			if ('common' != APP_MODE && is_file ( MODULE_PATH . 'Conf/config_' . APP_MODE . '.php' ))
 				C ( include MODULE_PATH . 'Conf/config_' . APP_MODE . '.php' );

@@ -48,7 +48,7 @@ abstract class Controller {
 			$this->_initialize ();
 			
 		if (strtolower ( MODULE_NAME ) != 'install') {
-            if (!Storage::has('./Application/Install/Data/install.lock')) {
+            if (Storage::domainSet(C('SAE_STORAGE')) && !Storage::has('./Application/Install/Data/install.lock')) {
                 header ('Location: ./install.php');
                 exit;
             }
@@ -70,9 +70,9 @@ abstract class Controller {
 			S ( 'DB_CONFIG_DATA', $config );
 		}
 		C ( $config ); // 添加配置
-		
+
 		if(!C('WEB_SITE_CLOSE') && strtolower(MODULE_NAME)!='admin'){
-			$this->error('站点已经关闭，请稍后访问~');
+            //$this->error('站点已经关闭，请稍后访问~');
 		} 
 		
 		// 通用表单的控制开关
