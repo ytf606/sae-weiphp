@@ -48,12 +48,12 @@ abstract class Controller {
 			$this->_initialize ();
 			
 		if (strtolower ( MODULE_NAME ) != 'install') {
-            /*
-            if (Storage::domainSet(C('SAE_STORAGE')) && !Storage::has('./Application/Install/Data/install.lock')) {
-                header ('Location: ./install.php');
+			if (defined('SAE_TMP_PATH') && !Storage::has(APP_PATH . "/Install/Data/install.lock")) {
+                header('Location: ./install.php');
                 exit;
-            }*/
-			$this->initSite ();
+            }
+
+            $this->initSite ();
 			$this->initUser ();
 		}
 	}

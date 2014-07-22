@@ -41,8 +41,6 @@ class Think {
       if(!APP_DEBUG && Storage::has($runtimefile,'runtime')){
           Storage::load($runtimefile,null,'runtime');
       }else{
-          if(Storage::has($runtimefile,'runtime'))
-              Storage::unlink($runtimefile,'runtime');
           $content =  '';
           // 读取应用模式
           $mode   =   include is_file(CONF_PATH.'core.php')?CONF_PATH.'core.php':THINK_PATH.'Conf/Mode/'.APP_MODE.'.php';
@@ -60,8 +58,11 @@ class Think {
               is_numeric($key)?C(include $file):C($key,include $file);
           }
           
-          //add by ytf606@gmail.com
-          Storage::domainSet(C('SAE_STORAGE'));
+        //add by ytf606@gmail.com
+        defined('SAE_TMP_PATH') && Storage::domainSet(C('SAE_STORAGE'));
+        if(Storage::has($runtimefile,'runtime')) {
+            Storage::unlink($runtimefile,'runtime');
+        }
 
           // 读取当前应用模式对应的配置文件        
           if('common' != APP_MODE && is_file(CONF_PATH.'config_'.APP_MODE.'.php'))

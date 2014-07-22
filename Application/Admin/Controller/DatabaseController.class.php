@@ -174,13 +174,29 @@ class DatabaseController extends AdminController{
      */
     public function del($time = 0){
         if($time){
+            
             $name  = date('Ymd-His', $time) . '-*.sql*';
             $path  = realpath(C('DATA_BACKUP_PATH')) . DIRECTORY_SEPARATOR . $name;
-            array_map("unlink", glob($path));
-            if(count(glob($path))){
-                $this->success('备份文件删除失败，请检查权限！');
+            //add by ytf606@gmail.com
+            if (defined('SAE_TMP_PATH')) {
+                $path = basename(C('DATA_BACKUP_PATH')); 
+                $files = \Think\Storage::fileList($path);
+                foreach ($files as $file_name) {
+                    $basename = basename($file_name);
+                    $date_tmp = explode("-", $basename, 3);
+                    if (strtotime($date_tmp[0] . $date_tmp[1]) != $time) {
+                        continue; 
+                    }
+                    \Think\Storage::unlink($file_name);
+                }
+                $this->success('备份文件删除成功');
             } else {
-                $this->success('备份文件删除成功！');
+                array_map("unlink", glob($path));
+                if(count(glob($path))){
+                    $this->success('备份文件删除失败，请检查权限！');
+                } else {
+                    $this->success('备份文件删除成功！');
+                }
             }
         } else {
             $this->error('参数错误！');
