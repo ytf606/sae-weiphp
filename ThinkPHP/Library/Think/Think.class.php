@@ -35,7 +35,7 @@ class Think {
       set_exception_handler('Think\Think::appException');
 
       // 初始化文件存储方式
-      Storage::connect('newsae');
+      Storage::connect(STORAGE_TYPE);
 
       $runtimefile  = RUNTIME_PATH.APP_MODE.'~runtime.php';
       if(!APP_DEBUG && Storage::has($runtimefile,'runtime')){

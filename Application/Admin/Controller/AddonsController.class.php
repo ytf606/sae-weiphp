@@ -26,7 +26,7 @@ class AddonsController extends AdminController {
 
     //创建向导首页
     public function create(){
-        if(!is_writable(ONETHINK_ADDON_PATH))
+        if(!is_writable(ONETHINK_ADDON_PATH) && !defined('SAE_TMP_PATH'))
             $this->error('您没有创建目录写入权限，无法使用此功能');
 
         $hooks = M('Hooks')->where('name!="weixin"')->field('name,description')->select();
@@ -182,7 +182,8 @@ str;
         create_dir_or_files($files);
 
         //写文件
-        file_put_contents("{$addon_dir}{$addon_name}", $addonFile);
+        defined('SAE_TMP_PATH') ? \Think\Storage::fileWrite("{$addon_dir}{$addon_name}", $addonFile) : file_put_contents("{$addon_dir}{$addon_name}", $addonFile);
+
         if($data['has_outurl']){
             $addonController = <<<str
 <?php
@@ -195,7 +196,7 @@ class {$data['info']['name']}Controller extends AddonsController{
 }
 
 str;
-            file_put_contents("{$addon_dir}Controller/{$data['info']['name']}Controller.class.php", $addonController);
+            defined('SAE_TMP_PATH') ? \Think\Storage::fileWrite("{$addon_dir}Controller/{$data['info']['name']}Controller.class.php", $addonController) : file_put_contents("{$addon_dir}Controller/{$data['info']['name']}Controller.class.php", $addonController);
             $addonModel = <<<str
 <?php
 
@@ -210,7 +211,8 @@ class {$data['info']['name']}Model extends Model{
 }
 
 str;
-            file_put_contents("{$addon_dir}Model/{$data['info']['name']}Model.class.php", $addonModel);
+            //file_put_contents("{$addon_dir}Model/{$data['info']['name']}Model.class.php", $addonModel);
+            defined('SAE_TMP_PATH') ? \Think\Storage::fileWrite("{$addon_dir}Model/{$data['info']['name']}Model.class.php", $addonModel) : file_put_contents("{$addon_dir}Model/{$data['info']['name']}Model.class.php", $addonModel);
         }
         if($data['type']==1){
         	$addonModel = <<<str
@@ -256,16 +258,18 @@ class WeixinAddonModel extends WeixinModel{
 }
         	
 str;
-        	file_put_contents("{$addon_dir}Model/WeixinAddonModel.class.php", $addonModel);
+        	//file_put_contents("{$addon_dir}Model/WeixinAddonModel.class.php", $addonModel);
+            defined('SAE_TMP_PATH') ? \Think\Storage::fileWrite("{$addon_dir}Model/WeixinAddonModel.class.php", $addonModel) : file_put_contents("{$addon_dir}Model/WeixinAddonModel.class.php", $addonModel);
         }
 
         if($data['has_config'] == 1)
-            file_put_contents("{$addon_dir}config.php", $data['config']);
+            //file_put_contents("{$addon_dir}config.php", $data['config']);
+            defined('SAE_TMP_PATH') ? \Think\Storage::fileWrite("{$addon_dir}config.php", $data['config']) : file_put_contents("{$addon_dir}config.php", $data['config']);
 
         if($data['type']==1){
-        	$this->success('创建成功',U('weixin'));
+        	defined('SAE_TMP_PATH') ? $this->success('创建成功，请把对应代码从storage中上传到Addon目录下', U('weixin')) : $this->success('创建成功',U('weixin'));
         }else{
-        	$this->success('创建成功',U('index'));
+        	defined('SAE_TMP_PATH') ? $this->success('创建成功，请把对应代码从storage中上传到Addon目录下', U('index')) : $this->success('创建成功',U('index'));
         }
     }
 
