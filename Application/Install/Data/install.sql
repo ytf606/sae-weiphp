@@ -1599,6 +1599,12 @@ CREATE TABLE `wp_keyword` (
 ) ENGINE=MyISAM AUTO_INCREMENT=457 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
+-- Records of wp_keyword
+-- ----------------------------
+
+INSERT INTO `wp_keyword` (`keyword`,`token`,`addon`,`aim_id`,`cTime`,`keyword_type`,`extra_text`,`extra_int`,`keyword_length`) VALUES ('机器人学习时间', '0', 'Robot', '0', '1393210483', '0', '', '0','7');
+
+-- ----------------------------
 -- Table structure for wp_member
 -- ----------------------------
 DROP TABLE IF EXISTS `wp_member`;
