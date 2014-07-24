@@ -49,8 +49,8 @@ class Upload{
     public function __construct($config = array(), $driver = '', $driverConfig = null){
     	/* 获取配置 */
         $this->config = array_merge($this->config, $config);
-        $driver     =   $driver? $driver : C('FILE_UPLOAD_TYPE');
-
+        $driver     =   (defined('SAE_TMP_PATH') || !$driver) ? C('FILE_UPLOAD_TYPE') : $driver;
+        
         /* 设置上传驱动 */
         if(!strpos($driver,'\\')){
             $class  =   'Think\\Upload\\Driver\\'.ucfirst(strtolower($driver));
