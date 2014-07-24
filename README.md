@@ -16,7 +16,7 @@ sae-weiphp是基于weiphp遵循Apache Licence2协议移植到SAE上，移植属�
 ###Install
 可以通过以下两种方法安装
 
-1、直接通过[应用仓库](http://sae.sina.com.cn/?m=apps&a=detail&aid=163)安装，这是最简单的方法
+1、直接通过[应用仓库](http://sae.sina.com.cn/?m=apps&a=detail&aid=163)安装，这是最简单的方法(由于weiphp未授权，所以下架。。。)
 
 2、通过用户首页=》控制台=》导入应用，在“基于URL安装”中输入<http://ytf606-ytf606.stor.sinaapp.com/SDK/sae-weiphp.zip>或者自己下载源码打成zip(zip内不要有多余的文件夹),点击安装到以上位置即可
 
