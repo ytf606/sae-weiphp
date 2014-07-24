@@ -43,8 +43,10 @@ class AnswerController extends AddonsController {
 		$name = parse_name ( get_table_name ( $this->model ['id'] ), true );
 		$list = M ( $name )->where ( $map )->order ( 'id DESC' )->group ( 'uid' )->selectPage ();
 		foreach ( $list ['list_data'] as &$vo ) {
-			$member = get_memberinfo ( $vo ['uid'] );
-			$vo ['truename'] = $member ['truename'];
+            //add by ytf606@gmail.com
+			//$member = get_memberinfo ( $vo ['uid'] );
+            $member = M ( 'follow' )->where ( array('id'=>$vo['uid']) )->order ( 'id DESC' )->find();
+			$vo ['truename'] = $member ['nickname'];
 			$vo ['mobile'] = $member ['mobile'];
 		}
 		

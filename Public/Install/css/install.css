@@ -218,7 +218,7 @@ only screen and (     -o-min-device-pixel-ratio: 2/1) {
 /* Masthead (docs home)
 ------------------------- */
 .masthead {
-    padding: 70px 0 80px;
+    padding: 70px 0 300px;
     margin-bottom: 0;
     color: #fff;
 }

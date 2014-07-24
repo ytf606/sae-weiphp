@@ -11,10 +11,13 @@ class WeixinAddonModel extends WeixinModel {
 		//dump($this->config);
 			
 		// 先尝试小九机器人
-		$content = $this->_xiaojo ( $dataArr ['Content'] );
-		
+		//add by ytf606@gmail.com
+        $content = '';
+        if ($this->config['i9_url'] && filter_var($this->config['i9_url'], FILTER_VALIDATE_EMAIL)) {
+            $content = $this->_xiaojo ( $dataArr ['Content'] );
+        }
 		// 再尝试小黄鸡
-		if (empty ( $content )) {
+		if (empty ( $content ) && $this->config['simsim_url'] && filter_var($this->config['simsim_url'], FILTER_VALIDATE_EMAIL)) {
 			$content = $this->_simsim ( $dataArr ['Content'] );
 		}
 		
